@@ -63,7 +63,8 @@ app.get('/panel/:function', async (req, res) => {
 });
 
 export let functions: { command: string, metadata: any }[];
-collectFunctions().then(res => {
+
+collectFunctions().then((res) => {
     Handlebars.registerHelper('functionsMeta', function () {
         return JSON.stringify(res);
     });

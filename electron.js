@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
-
+require('ts-node/register')
+require('./main')
 function createWindow () {
     const win = new BrowserWindow({
         width: 800,
@@ -14,8 +15,6 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
-    require('ts-node/register')
-    require('./main')
     createWindow()
 
     app.on('activate', () => {
