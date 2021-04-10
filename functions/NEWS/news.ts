@@ -8,8 +8,8 @@ export default class implements Action {
         let query = ""
         const result: any = {}
         if (args.length > 0) {
-            result.query = args[0]
-            query = "?q=" + args[0]
+            result.query = args.join(" ")
+            query = "?q=" + result.query
         }
         result.news = await Feed.load('https://news.google.com/rss' + query);
         return result
