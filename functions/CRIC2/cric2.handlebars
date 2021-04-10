@@ -1,0 +1,55 @@
+<div class="row">
+    {{#if scores}}
+        <h3>Cricket Scores</h3>
+        {{#each scores}}
+            <div class="col-6">
+                <a href="#" onclick="location.href = '/panel/CRIC2?q={{this.seriesId}}, {{this.id}}'">
+                <h6>{{inc @index}}) {{this.team1}} vs {{this.team2}}</h6>
+                <p>{{this.status}}</p>
+                </a>
+                <script>
+                    registerKeyNumber({{inc @index}}, () => location.href = "/panel/CRIC2?q=
+                        {{this.seriesId}}, {{this.id}}"
+                    )
+                </script>
+            </div>
+        {{/each}}
+    {{/if}}
+    {{#if currentMatch}}
+        <h3>{{currentMatch.teams.[0].team.longName}} vs {{currentMatch.teams.[1].team.longName}}</h3>
+
+        <div class="col-6">
+            <div class="row">
+                <div class="col-2">
+                    <img style="width: 100%"
+                         src="https://img1.hscicdn.com/image/upload/f_auto,t_s_100/lsci/{{currentMatch.teams.[0].team.image.url}}"/>
+                </div>
+                <div class="col-2">
+                    {{currentMatch.teams.[0].team.abbreviation}}
+                </div>
+                <div class="col" style="text-align: right">
+                    {{currentMatch.teams.[0].score}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <img style="width: 100%"
+                         src="https://img1.hscicdn.com/image/upload/f_auto,t_s_100/lsci/{{currentMatch.teams.[1].team.image.url}}"/>
+                </div>
+                <div class="col-2">
+                    {{currentMatch.teams.[1].team.abbreviation}}
+                </div>
+                <div class="col" style="text-align: right">
+                    {{currentMatch.teams.[1].score}}
+                </div>
+            </div>
+            <h6>Series</h6>
+            <span>{{currentMatch.series.longName}}</span>
+            <h6>Ground</h6>
+            <span>{{currentMatch.ground.name}}</span>
+        </div>
+        <div class="col-6">
+            <span>{{currentMatch.statusText}}</span>
+        </div>
+    {{/if}}
+</div>
