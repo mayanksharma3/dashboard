@@ -1,0 +1,31 @@
+<div class="row" style="text-align: center">
+    <div id="clockContainer">
+        <h1 style="font-size: 10vw;" id="clock"></h1>
+        <h2 style="font-size: 5vw;" id="date"></h2>
+    </div>
+</div>
+<script>
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    function updateTime() {
+        const currentDate = new Date()
+        $('#clock').html(currentDate.toLocaleTimeString())
+        $('#date').html(days[currentDate.getDay()] + ", " + currentDate.getDate() + " " + months[currentDate.getMonth()])
+    }
+
+    updateTime()
+    setInterval(() => {
+        updateTime()
+    }, 1000)
+
+</script>
+<style>
+    #clockContainer {
+        position: absolute;
+        left: 50%;
+        top: calc(50% + 40px);
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+</style>

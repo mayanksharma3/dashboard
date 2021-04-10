@@ -1,0 +1,79 @@
+* {
+    font-family: 'Ubuntu', sans-serif;
+    /*color: #d7d7d7 !important;*/
+}
+
+input {
+    text-transform: uppercase !important;
+}
+
+#panelTextInput {
+    width: 100%;
+    background: black !important;
+    border: 3px solid rgb(78, 142, 245);
+    color: white !important;
+    z-index: 1000 !important;
+    font-weight: bold;
+    /*caret-color: transparent;*/
+}
+
+#panelBody {
+    padding-top: 20px;
+}
+
+#panelBody > * {
+    color: rgb(242, 165, 71) !important;
+}
+
+#panelBody h1, h2, h3 {
+    text-transform: uppercase !important;
+}
+
+#panelBody > h3 {
+    text-align: center;
+    text-transform: uppercase !important;
+}
+
+input:focus {
+    outline: 0 !important;
+}
+
+.list-group {
+    z-index: 100 !important;
+}
+
+.list-group-item {
+    background: #2a2a2a !important;
+    color: white;
+}
+
+.sticky-top {
+    top: 40px;
+}
+
+div {
+    cursor: default;
+}
+
+.loadingContainer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: white;
+    border: 1px solid white;
+    padding: 30px;
+    background: black;
+    display: none;
+    z-index: 10000 !important;
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+a:hover {
+    color: unset;
+}

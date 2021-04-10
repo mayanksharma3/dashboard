@@ -1,0 +1,64 @@
+<div>
+    <div class="fixed-header" style="background: black; z-index: 1000;">
+        <div style=" margin-top: 35px;">
+            <i onclick="window.history.back()" style="color:white; cursor: pointer; padding-bottom: 10px" class="fa fa-arrow-left"></i>
+            <input oninput="updateSearch(this.value)" id="panelTextInput" class="panelInput" type="text" autofocus/>
+            <div id="panelResults"
+                 style="color: white; background: rgb(242, 165, 71); width: calc(100% - 100px); position: fixed; z-index: 5000">
+
+            </div>
+        </div>
+    </div>
+    <div id="panelBody" style="z-index: 100; margin-top: 70px;">
+        {{{panelBody}}}
+    </div>
+    <style>
+        .fixed-header {
+            width: calc(100% - 100px);
+            position: fixed;
+            top: 0;
+            z-index: 1000 !important;
+        }
+    </style>
+    <script>
+
+        function isNumeric(str) {
+            if (typeof str != "string") return false // we only process strings!
+            return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+        }
+
+        let panelInput = document.getElementById("panelTextInput");
+        panelInput.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                if (isNumeric(panelInput.value)) {
+                    keyShortcuts[parseInt(panelInput.value)]()
+                }
+                const args = panelInput.value.toUpperCase().split(" ")
+                panelInput.value = ""
+                $('#panelResults').html('')
+                if (args.length > 0) {
+                    let chosenFunction = args.shift();
+                    location.href = `/panel/${chosenFunction}?fuzzy=${fuse.search(chosenFunction)[0].command}&q=${encodeURIComponent(args)}`
+                }
+            }
+        });
+
+        const fuse = new Fuse(functions, {
+            keys: ['command', 'metadata.description']
+        })
+
+        function updateSearch(searchString) {
+            $('#panelResults').html('')
+            fuse.search(searchString.split(" ")[0]).forEach(x => {
+                $('#panelResults').append(`<span style="margin-left: 10px; padding: 0"><a style="text-decoration: none; color: white" href="/panel/${x.command}"><b>${x.command}</b> (${x.metadata.description})</a></span><br/>`)
+            })
+        }
+
+        $("body").bind('keydown', function (e) {
+            $('#panelTextInput').focus();
+            // $(document).unbind('keydown');
+        });
+    </script>
+</div>

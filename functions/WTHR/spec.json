@@ -1,0 +1,6 @@
+{
+  "description": "Show weather",
+  "variables": {
+    "defaultLocation": "Hazlemere"
+  }
+}

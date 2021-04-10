@@ -1,0 +1,53 @@
+<div class="row">
+    <h2>{{recipe.name}}</h2>
+    <div class="col-4">
+        <div>
+            <img style="width: 100%; height: auto" src="{{recipe.image}}"/>
+            <h6>{{{recipe.description}}}</h6>
+            <p>Yield: {{{recipe.recipeYield}}}</p>
+<!--            <div onclick="showIngredients()" class="btn btn-block btn-lg btn-primary">Ingredients</div>-->
+<!--            <div onclick="showRecipe()" class="btn btn-lg btn-block btn-primary">Recipe</div>-->
+        </div>
+    </div>
+    <div class="col-8">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <div id="ingredientButton" class="nav-link active" onclick="showIngredients()">Ingredients</div>
+            </li>
+            <li class="nav-item">
+                <div id="recipeButton" class="nav-link" onclick="showRecipe()">Recipe</div>
+            </li>
+        </ul>
+        <ul id="ingredients" class="list-group">
+            {{#each recipe.recipeIngredient}}
+                <li class="list-group-item">{{{this}}}</li>
+            {{/each}}
+        </ul>
+
+        <ul id="instructions" style="display: none" class="list-group">
+            {{#each recipe.recipeInstructions}}
+                <li class="recipe-item list-group-item">{{{this}}}</li>
+            {{/each}}
+        </ul>
+    </div>
+    <script>
+
+        $('.list-group-item').on('click', function () {
+            $(this).toggleClass("item-read");
+        })
+
+        function showIngredients() {
+            $("#ingredientButton").addClass("active")
+            $("#recipeButton").removeClass("active")
+            $('#instructions').hide()
+            $('#ingredients').show()
+        }
+
+        function showRecipe() {
+            $("#recipeButton").addClass("active")
+            $("#ingredientButton").removeClass("active")
+            $('#ingredients').hide()
+            $('#instructions').show()
+        }
+    </script>
+</div>

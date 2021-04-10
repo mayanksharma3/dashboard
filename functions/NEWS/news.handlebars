@@ -1,0 +1,11 @@
+<h3>News Feed {{#if query}} - {{query}}{{/if}}</h3>
+<div>
+    {{#each news.items}}
+        <a href="#" onclick="$.get('/open?q=' +'{{this.url}}')">
+            <h6>{{inc @index}}) {{this.title}}</h6>
+        </a>
+        <script>
+            registerKeyNumber({{inc @index}}, () => $.get('/open?q=' +'{{this.url}}'))
+        </script>
+    {{/each}}
+</div>

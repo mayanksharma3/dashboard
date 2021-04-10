@@ -1,0 +1,11 @@
+<h3>Cricket Scores</h3>
+<div>
+    {{#each scores}}
+        <a href="#" onclick="$.get('/open?q=' +'{{this.link}}')">
+            <h6>{{inc @index}}) {{this.title}}</h6>
+        </a>
+        <script>
+            registerKeyNumber({{inc @index}}, () => $.get('/open?q=' +'{{this.link}}'))
+        </script>
+    {{/each}}
+</div>
