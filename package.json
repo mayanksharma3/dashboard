@@ -14,7 +14,7 @@
       "**/*"
     ],
     "extends": null,
-    "productName": "Terminal"
+    "productName": "Dashboard"
   },
   "keywords": [],
   "author": "",
