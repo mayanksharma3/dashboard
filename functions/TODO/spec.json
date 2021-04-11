@@ -1,0 +1,25 @@
+{
+  "description": "Show clock",
+  "commands": [
+    {
+      "id": "default",
+      "description": "View lists",
+      "syntax": "*"
+    },
+    {
+      "id": "addItem",
+      "description": "Add item to List",
+      "syntax": "{{LIST}} ADD {{ITEM}}*"
+    },
+    {
+      "id": "completeItem",
+      "description": "View List",
+      "syntax": "{{LIST}} COMPLETE {{ID}}"
+    },
+    {
+      "id": "viewList",
+      "description": "View List",
+      "syntax": "{{LIST}}"
+    }
+  ]
+}

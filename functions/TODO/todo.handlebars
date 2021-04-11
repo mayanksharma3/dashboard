@@ -1,0 +1,43 @@
+<div class="row">
+    {{#if overview}}
+        {{#each lists}}
+            <div class="col-4">
+                <h4 style="text-transform: uppercase">{{this.name}}</h4>
+                <ul class="list-group">
+                    {{#each this.items}}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-9">
+                                    {{this.title}}
+                                </div>
+                                <div class="col-3">
+                                    <button onclick="location.href = '/panel/TODO?q={{../this.name}},COMPLETE,{{this.id}}'" class="border-0 btn btn-outline-success"><i class="fa fa-check"></i></button>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/each}}
+    {{/if}}
+    {{#if listTitle}}
+        <div class="col-12">
+            <h4 style="text-transform: uppercase">{{listTitle}}</h4>
+            <ul class="list-group">
+                {{#each items}}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-9">
+                                {{this.title}}
+                            </div>
+                            <div class="col-3">
+                                <button onclick="location.href = '/panel/TODO?q={{../listTitle}},COMPLETE,{{this.id}}'" class="border-0 btn btn-outline-success"><i class="fa fa-check"></i></button>
+                            </div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    {{/if}}
+</div>
