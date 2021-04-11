@@ -64,7 +64,7 @@ app.get('/panel/:function', async (req, res) => {
         } else {
             const template = await fs.readFile(`${__dirname}/views/error.handlebars`)
             const compiledTemplate = Handlebars.compile(template.toString())
-            res.render("panel", {panelBody: compiledTemplate({})});
+            res.render("panel", {panelBody: compiledTemplate({functionInfo: functionInfo})});
         }
     }
 
