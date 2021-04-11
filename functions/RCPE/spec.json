@@ -1,4 +1,10 @@
 {
-  "description": "Recipe Infos"
-
+  "description": "Recipe Parser and Information",
+  "commands": [
+    {
+      "id": "recipeInfo",
+      "syntax": "INFO {{URL}}",
+      "description": "Find recipe info from URL"
+    }
+  ]
 }

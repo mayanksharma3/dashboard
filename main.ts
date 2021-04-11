@@ -5,6 +5,7 @@ import {promises as fs} from 'fs';
 import Action from "./utils/action";
 import Handlebars from 'handlebars';
 import open from "open";
+import {DFunction, validateFunction} from "./utils/commands";
 
 const app = express()
 
@@ -52,17 +53,24 @@ app.get('/panel/:function', async (req, res) => {
     }
     let functionName = functionInfo.command;
     if (functionInfo) {
-        const test = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
-        const testInstance = new test() as Action;
-        const props = await testInstance.preProcessing(req.query.q ? req.query.q.split(",") : []);
-        const template = await fs.readFile(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}.handlebars`)
-        const compiledTemplate = Handlebars.compile(template.toString())
-        res.render("panel", {panelBody: compiledTemplate(props)});
+        const args = validateFunction(functionInfo, req.query.q ? req.query.q.split(",") : [])
+        if(args) {
+            const test = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
+            const testInstance = new test() as Action;
+            const props = await testInstance.preProcessing(args);
+            const template = await fs.readFile(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}.handlebars`)
+            const compiledTemplate = Handlebars.compile(template.toString())
+            res.render("panel", {panelBody: compiledTemplate(props)});
+        } else {
+            const template = await fs.readFile(`${__dirname}/views/error.handlebars`)
+            const compiledTemplate = Handlebars.compile(template.toString())
+            res.render("panel", {panelBody: compiledTemplate({})});
+        }
     }
 
 });
 
-export let functions: { command: string, metadata: any }[];
+export let functions: DFunction[];
 
 collectFunctions().then((res) => {
     Handlebars.registerHelper('functionsMeta', function () {
@@ -73,4 +81,5 @@ collectFunctions().then((res) => {
         console.log("Started Server")
     })
 })
+
 

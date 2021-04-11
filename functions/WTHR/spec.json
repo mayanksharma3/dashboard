@@ -1,5 +1,17 @@
 {
   "description": "Show weather",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Show weather for default location"
+    },
+    {
+      "id": "locationSearch",
+      "syntax": "{{LOCATION}}*",
+      "description": "Show weather for specified location"
+    }
+  ],
   "variables": {
     "defaultLocation": "Hazlemere"
   }

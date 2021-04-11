@@ -4,52 +4,196 @@
         {{#each scores}}
             <div class="col-6">
                 <a href="#" onclick="location.href = '/panel/CRIC2?q={{this.seriesId}}, {{this.id}}'">
-                <h6>{{inc @index}}) {{this.team1}} vs {{this.team2}}</h6>
-                <p>{{this.status}}</p>
+                    <h6>{{inc @index}}) {{this.team1}} vs {{this.team2}}</h6>
+                    <p>{{this.status}}</p>
                 </a>
                 <script>
-                    registerKeyNumber({{inc @index}}, () => location.href = "/panel/CRIC2?q=
-                        {{this.seriesId}}, {{this.id}}"
-                    )
+                    registerKeyNumber({{inc @index}}, () => location.href = '/panel/CRIC2?q={{this.seriesId}}, {{this.id}}')
                 </script>
             </div>
         {{/each}}
     {{/if}}
     {{#if currentMatch}}
         <h3>{{currentMatch.teams.[0].team.longName}} vs {{currentMatch.teams.[1].team.longName}}</h3>
+        <span>{{currentMatch.series.longName}}, <span>{{currentMatch.ground.name}}</span></span>
 
-        <div class="col-6">
+        <div class="col-12">
             <div class="row">
-                <div class="col-2">
+                <div class="col-1">
                     <img style="width: 100%"
                          src="https://img1.hscicdn.com/image/upload/f_auto,t_s_100/lsci/{{currentMatch.teams.[0].team.image.url}}"/>
                 </div>
-                <div class="col-2">
-                    {{currentMatch.teams.[0].team.abbreviation}}
+                <div class="col-1">
+                    <h4>{{currentMatch.teams.[0].team.abbreviation}}</h4>
                 </div>
                 <div class="col" style="text-align: right">
                     {{currentMatch.teams.[0].score}}
                 </div>
             </div>
             <div class="row">
-                <div class="col-2">
+                <div class="col-1">
                     <img style="width: 100%"
                          src="https://img1.hscicdn.com/image/upload/f_auto,t_s_100/lsci/{{currentMatch.teams.[1].team.image.url}}"/>
                 </div>
-                <div class="col-2">
-                    {{currentMatch.teams.[1].team.abbreviation}}
+                <div class="col-1">
+                    <h4>{{currentMatch.teams.[1].team.abbreviation}}</h4>
                 </div>
                 <div class="col" style="text-align: right">
+                    {{#if currentMatch.teams.[1].scoreInfo}}
+                        <small style="font-size: 10px">({{currentMatch.teams.[1].scoreInfo}})</small>
+                    {{/if}}
                     {{currentMatch.teams.[1].score}}
                 </div>
             </div>
-            <h6>Series</h6>
-            <span>{{currentMatch.series.longName}}</span>
-            <h6>Ground</h6>
-            <span>{{currentMatch.ground.name}}</span>
+            <small style="float: right">{{currentMatch.statusText}}</small>
         </div>
-        <div class="col-6">
-            <span>{{currentMatch.statusText}}</span>
+        <div class="col-12">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <div id="inning1Button" class="nav-link active"
+                         onclick="showInnings1()">{{content.scorecard.innings.[0].team.abbreviation}}</div>
+                </li>
+                <li class="nav-item">
+                    <div id="inning2Button" class="nav-link"
+                         onclick="showInnings2()">{{content.scorecard.innings.[1].team.abbreviation}}</div>
+                </li>
+            </ul>
+            <div id="inning1">
+                <div class="table-responsive">
+                    <table style="width: 100%;" class="table table-sm table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">BATSMEN</th>
+                            <th scope="col">R</th>
+                            <th scope="col">B</th>
+                            <th scope="col">4s</th>
+                            <th scope="col">6s</th>
+                            <th scope="col">SR</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each content.scorecard.innings.[0].inningBatsmen}}
+                            {{#if this.runs}}
+                                <tr>
+                                    <td style="color: orange">{{this.player.name}}</td>
+                                    <td><b>{{this.runs}}</b></td>
+                                    <td>{{this.balls}}</td>
+                                    <td>{{this.fours}}</td>
+                                    <td>{{this.sixes}}</td>
+                                    <td>{{this.strikerate}}</td>
+                                </tr>
+                            {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table style="width: 100%;" class="table table-sm table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">BOWLING</th>
+                            <th scope="col">O</th>
+                            <th scope="col">M</th>
+                            <th scope="col">R</th>
+                            <th scope="col">W</th>
+                            <th scope="col">ECON</th>
+                            <th scope="col">WD</th>
+                            <th scope="col">NB</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each content.scorecard.innings.[0].inningBowlers}}
+                            <tr>
+                                <td style="color: orange">{{this.player.name}}</td>
+                                <td><b>{{this.overs}}</b></td>
+                                <td>{{this.maidens}}</td>
+                                <td>{{this.conceded}}</td>
+                                <td>{{this.wickets}}</td>
+                                <td>{{this.economy}}</td>
+                                <td>{{this.wides}}</td>
+                                <td>{{this.noballs}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: none" id="inning2">
+                <div class="table-responsive">
+                    <table style="width: 100%;" class="table table-dark table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">BATSMEN</th>
+                            <th scope="col">R</th>
+                            <th scope="col">B</th>
+                            <th scope="col">4s</th>
+                            <th scope="col">6s</th>
+                            <th scope="col">SR</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each content.scorecard.innings.[1].inningBatsmen}}
+                            {{#if this.runs}}
+                                <tr>
+                                    <td style="color: orange">{{this.player.name}}</td>
+                                    <td><b>{{this.runs}}</b></td>
+                                    <td>{{this.balls}}</td>
+                                    <td>{{this.fours}}</td>
+                                    <td>{{this.sixes}}</td>
+                                    <td>{{this.strikerate}}</td>
+                                </tr>
+                            {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table style="width: 100%;" class="table table-sm table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">BOWLING</th>
+                            <th scope="col">O</th>
+                            <th scope="col">M</th>
+                            <th scope="col">R</th>
+                            <th scope="col">W</th>
+                            <th scope="col">ECON</th>
+                            <th scope="col">WD</th>
+                            <th scope="col">NB</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each content.scorecard.innings.[1].inningBowlers}}
+                            <tr>
+                                <td style="color: orange">
+                                    {{this.player.name}}</th>
+                                <td><b>{{this.overs}}</b></td>
+                                <td>{{this.maidens}}</td>
+                                <td>{{this.conceded}}</td>
+                                <td>{{this.wickets}}</td>
+                                <td>{{this.economy}}</td>
+                                <td>{{this.wides}}</td>
+                                <td>{{this.noballs}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     {{/if}}
 </div>
+<script>
+    function showInnings1() {
+        $("#inning1Button").addClass("active")
+        $("#inning2Button").removeClass("active")
+        $('#inning2').hide()
+        $('#inning1').show()
+    }
+
+    function showInnings2() {
+        $("#inning2Button").addClass("active")
+        $("#inning1Button").removeClass("active")
+        $('#inning1').hide()
+        $('#inning2').show()
+    }
+</script>

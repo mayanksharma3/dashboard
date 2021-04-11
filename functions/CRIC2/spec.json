@@ -1,3 +1,20 @@
 {
-  "description": "View live cricket scores"
+  "description": "View live cricket scores",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Find matches live now"
+    },
+    {
+      "id": "seriesFilter",
+      "syntax": "{{SERIES}}",
+      "description": "Find matches from specific series"
+    },
+    {
+      "id": "scorecard",
+      "syntax": "{{SERIES_ID}} {{MATCH_ID}}",
+      "description": "Show match scorecard based off series ID and match ID"
+    }
+  ]
 }

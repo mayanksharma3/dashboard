@@ -1,5 +1,5 @@
 interface Action {
-    preProcessing(args: string[]);
+    preProcessing(args: { id: string, variables: {[key: string]: string }});
 
 }
 

@@ -1,3 +1,10 @@
 {
-  "description": "Search for movies in IMDB"
+  "description": "Search for movies in IMDB",
+  "commands": [
+    {
+      "id": "imdbSearch",
+      "syntax": "{{QUERY}}*",
+      "description": "Find IMDB info based off query"
+    }
+  ]
 }

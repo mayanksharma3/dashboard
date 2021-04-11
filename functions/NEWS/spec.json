@@ -1,3 +1,15 @@
 {
-  "description": "Show news based on topic or in general"
+  "description": "Show news based on topic or in general",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Load general news"
+    },
+    {
+      "id": "querySearch",
+      "syntax": "{{QUERY}}*",
+      "description": "Find news based on query"
+    }
+  ]
 }

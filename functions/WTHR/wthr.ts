@@ -3,8 +3,8 @@ import axios from "axios";
 
 export default class implements Action {
 
-    async preProcessing(args: string[]) {
-        const location = args.length > 0 ? args[0] : "Hazlemere";
+    async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
+        const location = args.id === "locationSearch" ? args.variables["LOCATION"] : "Hazlemere";
         const res = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=712d937fbad3bca221f1a0649abff2c0&units=metric`)
         const temp = Math.round(res.data.main.temp) + '°C'
         const tempMin = Math.round(res.data.main.temp_min) + '°C'

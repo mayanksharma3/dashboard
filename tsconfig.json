@@ -5,7 +5,6 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": false,
-    "jsx": "react"
   },
   "lib": ["es2015"]
 }

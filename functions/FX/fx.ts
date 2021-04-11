@@ -3,9 +3,14 @@ import axios from "axios";
 
 export default class implements Action {
 
-    async preProcessing(args: string[]) {
-        const fsResult = await axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${args[0]}&to_currency=${args[1]}&apikey=UUJH7C28CFKAR8ZC`)
-        return {from: args[0], to: args[1], amountFrom: args[2], amountTo: (parseFloat(fsResult.data['Realtime Currency Exchange Rate']["5. Exchange Rate"]) * parseFloat(args[2]))}
+    async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
+        const fsResult = await axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${args.variables["FROM"]}&to_currency=${args.variables["TO"]}&apikey=UUJH7C28CFKAR8ZC`)
+        return {
+            from: args.variables["FROM"],
+            to: args.variables['TO'],
+            amountFrom: args.variables["AMOUNT"],
+            amountTo: (parseFloat(fsResult.data['Realtime Currency Exchange Rate']["5. Exchange Rate"]) * parseFloat(args.variables["AMOUNT"]))
+        }
     }
 
 }

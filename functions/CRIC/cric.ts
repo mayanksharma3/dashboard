@@ -4,7 +4,7 @@ import parser from "xml2json-ltx";
 
 export default class implements Action {
 
-    async preProcessing(args: string[]) {
+    async preProcessing() {
         const xmlFetch = await axios.get("https://static.cricinfo.com/rss/livescores.xml")
         return {scores: JSON.parse(parser.toJson(xmlFetch.data)).rss.channel.item}
     }
