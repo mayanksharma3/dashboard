@@ -1,0 +1,6 @@
+{
+  "description": "View Calendar",
+  "variables": {
+    "calendarLink": "https://www.imperial.ac.uk/timetabling/mytimetable/ical/BF8HNNPN1347595/schedule.ics"
+  }
+}

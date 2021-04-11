@@ -13,6 +13,7 @@
     }
   ],
   "variables": {
-    "defaultLocation": "Hazlemere"
+    "defaultLocation": "Hazlemere",
+    "API_KEY": "712d937fbad3bca221f1a0649abff2c0"
   }
 }

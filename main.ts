@@ -47,7 +47,7 @@ app.get('/panel', (req, res) => {
 });
 
 app.get('/panel/:function', async (req, res) => {
-    let functionInfo = functions.find(x => x.command === req.params.function.toUpperCase())
+    let functionInfo: DFunction = functions.find(x => x.command === req.params.function.toUpperCase())
     if (!functionInfo) {
         functionInfo = functions.find(x => x.command === req.query.fuzzy.toUpperCase())
     }
@@ -56,7 +56,7 @@ app.get('/panel/:function', async (req, res) => {
         const args = validateFunction(functionInfo, req.query.q ? req.query.q.split(",") : [])
         if(args) {
             const test = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
-            const testInstance = new test() as Action;
+            const testInstance = new test(functionInfo.metadata.variables || {}) as Action;
             const props = await testInstance.preProcessing(args);
             const template = await fs.readFile(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}.handlebars`)
             const compiledTemplate = Handlebars.compile(template.toString())

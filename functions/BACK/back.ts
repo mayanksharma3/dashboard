@@ -1,6 +1,6 @@
 import Action from "../../utils/action";
 
-export default class implements Action {
+export default class extends Action {
 
     async preProcessing() {
         return {}

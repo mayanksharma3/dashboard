@@ -2,7 +2,7 @@ import Action from "../../utils/action";
 
 const Feed = require('rss-to-json');
 
-export default class implements Action {
+export default class extends Action {
 
     async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
         let query = ""

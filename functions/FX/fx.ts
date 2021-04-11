@@ -1,7 +1,7 @@
 import Action from "../../utils/action";
 import axios from "axios";
 
-export default class implements Action {
+export default class extends Action {
 
     async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
         const fsResult = await axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${args.variables["FROM"]}&to_currency=${args.variables["TO"]}&apikey=UUJH7C28CFKAR8ZC`)

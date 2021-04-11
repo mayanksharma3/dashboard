@@ -1,7 +1,7 @@
 import Action from "../../utils/action";
 import {exec} from "../../utils/commands";
 
-export default class implements Action {
+export default class extends Action {
 
     async preProcessing() {
         await exec('open -a terminal $HOME')

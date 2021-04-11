@@ -1,0 +1,28 @@
+<h3>Calendar</h3>
+<link href="https://bootswatch.com/4/darkly/bootstrap.min.css" rel="stylesheet"/>
+<link href='/assets/fullcalendar/main.css' rel='stylesheet' />
+<script src='/assets/fullcalendar/main.js'></script>
+<div>
+    <div style="padding: 20px; height: 100%" id='calendar'></div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                themeSystem: 'bootstrap',
+                initialView: 'dayGridMonth',
+                initialDate: '2021-04-07',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: {{{events}}}
+            });
+
+            calendar.render();
+        });
+
+    </script>
+</div>

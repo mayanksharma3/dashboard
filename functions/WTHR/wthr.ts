@@ -1,11 +1,11 @@
 import Action from "../../utils/action";
 import axios from "axios";
 
-export default class implements Action {
+export default class extends Action {
 
     async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
-        const location = args.id === "locationSearch" ? args.variables["LOCATION"] : "Hazlemere";
-        const res = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=712d937fbad3bca221f1a0649abff2c0&units=metric`)
+        const location = args.id === "locationSearch" ? args.variables["LOCATION"] : this.configVariables.defaultLocation;
+        const res = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${this.configVariables.API_KEY}&units=metric`)
         const temp = Math.round(res.data.main.temp) + '°C'
         const tempMin = Math.round(res.data.main.temp_min) + '°C'
         const tempMax = Math.round(res.data.main.temp_max) + '°C'
