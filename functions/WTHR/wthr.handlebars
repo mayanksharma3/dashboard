@@ -13,6 +13,14 @@
             <img style="margin: 0 auto; width: 100%; max-width: 250px" src="{{imageLg}}"/>
         </div>
     </div>
-
+    <div class="row">
+        {{#each daily}}
+            <div class="col-2" style="margin-bottom: 15px">
+                <h6 style="text-align: center">{{this.day}}</h6>
+                <img style="width: 100%" src='http://openweathermap.org/img/wn/{{this.icon}}@4x.png'/>
+                <p style="text-align: center;">{{this.min}}°C / {{this.max}}°C</p>
+            </div>
+        {{/each}}
+    </div>
 </div>
 
