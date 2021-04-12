@@ -5,7 +5,6 @@ const Feed = require('rss-to-json');
 export default class extends Action {
 
     async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
-        console.log(args)
         let query = ""
         const result: any = {}
         if (args.id === "querySearch") {

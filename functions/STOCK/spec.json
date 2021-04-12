@@ -1,0 +1,9 @@
+{
+  "description": "Go to previous page",
+  "commands": [
+    {
+      "syntax": "{{EXCHANGE}} {{STOCK}}",
+      "description": "Get stock info"
+    }
+  ]
+}
