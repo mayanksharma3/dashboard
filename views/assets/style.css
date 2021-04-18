@@ -44,13 +44,13 @@ input {
 
 #panelInputContainer {
     width: 100%;
-    border: 3px solid rgba(78, 142, 245, 0.7);
+    border: 1px solid rgba(78, 142, 245, 0.7);
     padding: 0;
-    height: 34px
+    height: 25px
 }
 
 .focusedPanelContainer {
-    border: 3px solid rgba(78, 142, 245, 1.0) !important;
+    border: 1px solid rgba(78, 142, 245, 1.0) !important;
 }
 
 .focusedPanelContainer > img {
@@ -82,7 +82,7 @@ input {
     background-color: rgba(78, 142, 245, 0.7);
     display: inline-block;
     width: 10px;
-    height: 24px;
+    height: 20px;
 }
 
 #panelBody {
