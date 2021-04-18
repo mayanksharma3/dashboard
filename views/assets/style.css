@@ -46,7 +46,7 @@ input {
     width: 100%;
     border: 1px solid rgba(78, 142, 245, 0.7);
     padding: 0;
-    height: 25px
+    height: 25px;
 }
 
 .focusedPanelContainer {
@@ -62,7 +62,7 @@ input {
 }
 
 #panelTextInput {
-    margin-left: 0px;
+    margin-left: 0;
     background: transparent !important;
     color: white !important;
     z-index: 1000 !important;
@@ -71,7 +71,8 @@ input {
     display: inline-block;
     outline: none;
     text-transform: uppercase;
-    padding: 0 !important;
+    padding: 0;
+    vertical-align: top;
 }
 
 #caret {
