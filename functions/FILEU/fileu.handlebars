@@ -1,2 +1,35 @@
-<h3>Upload file</h3>
-<input type="file" id="file"/>
+{{#if upload}}
+    <h3>Upload file</h3>
+    <input type="file" id="file"/>
+    <script>
+        $('#file').change((e) => {
+            location.href = '/panel/FILEU?q=' + document.getElementById("file").files[0].path;
+        })
+    </script>
+{{/if}}
+
+{{#if result}}
+    <h3>File Link Generated</h3>
+    <div style="width: 50%; margin: 0 auto">
+        <div class="card">
+            <div class="card-header">
+                1-Time File Link Generated
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <span id="link" onclick="$.get('/open?q={{link}}')">{{link}}</span>
+                    <i onclick="copyLink()" style="float:right;" class="fa fa-copy"></i>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+    <script>
+        function copyLink() {
+            navigator.clipboard.writeText('{{{link}}}').then(function() {
+                console.log('Async: Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        }
+    </script>
+{{/if}}

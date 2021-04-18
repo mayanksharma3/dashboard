@@ -18,9 +18,9 @@ export default class extends Action {
                 data: data
             };
             const response = await axios(config)
-            return {response: response}
+            return {result: true, link: response.data.link}
         } else {
-            return {id: 'default'}
+            return {upload: true}
         }
 
         // return {short_url: response.data["result_url"]}
