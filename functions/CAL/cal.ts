@@ -1,7 +1,7 @@
 import Action from "../../utils/action";
 import axios from "axios";
 
-var ical2json = require("ical2json");
+const ical2json = require("ical2json");
 
 export default class extends Action {
 

@@ -1,0 +1,10 @@
+{
+  "description": "Shorten URLs",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "{{URL}}",
+      "description": "Shorten provided url"
+    }
+  ]
+}

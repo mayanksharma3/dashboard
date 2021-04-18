@@ -1,0 +1,15 @@
+{
+  "description": "Upload Files to generate 1-time link",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Upload given file"
+    },
+    {
+      "id": "uploadFilePath",
+      "syntax": "{{FILEPATH}}",
+      "description": "Upload file based on path"
+    }
+  ]
+}

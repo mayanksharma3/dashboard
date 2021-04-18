@@ -1,5 +1,5 @@
 import Action from "../../utils/action";
-import {exec} from "../../utils/commands";
+import {exec} from "../../utils/functions";
 
 export default class extends Action {
 

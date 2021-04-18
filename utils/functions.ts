@@ -1,6 +1,7 @@
 import {exec as exec2} from "child_process";
 import {promisify} from "util";
 import Handlebars from 'handlebars';
+import {promises as fs} from "fs";
 
 export const exec = promisify(exec2)
 
@@ -18,10 +19,13 @@ export interface FunctionVariables {
     variables: { [key: string]: string }
 }
 
-
-export function isNumeric(str: string) {
-    // @ts-ignore
-    return !isNaN(str) && !isNaN(parseFloat(str))
+export function collectFunctions(): Promise<{ command: string, metadata: any }[]> {
+    return fs.readdir(__dirname + "/functions").then((commands) => {
+        return commands.map((command) => {
+            const result = require(__dirname + "/functions/" + command + "/spec.json")
+            return {command: command, metadata: result}
+        })
+    })
 }
 
 export function validateFunction(dFunction: DFunction, args: string[]): FunctionVariables | undefined {

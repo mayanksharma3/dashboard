@@ -5,7 +5,8 @@ import {promises as fs} from 'fs';
 import Action from "./utils/action";
 import Handlebars from 'handlebars';
 import open from "open";
-import {DFunction, validateFunction} from "./utils/commands";
+import {DFunction, validateFunction} from "./utils/functions";
+import Fuse from 'fuse.js';
 
 const app = express()
 
@@ -39,28 +40,48 @@ function collectFunctions(): Promise<{ command: string, metadata: any }[]> {
 }
 
 app.get('/open', async (req, res) => {
-    await open(req.query.q)
+    await open(req.query.q as string)
 });
 
 app.get('/panel', (req, res) => {
     res.render('panel');
 });
 
+let functionRouter = undefined
+app.use("/api", (req, res, next) => {
+    functionRouter(req, res, next)
+});
+
 app.get('/panel/:function', async (req, res) => {
     let functionInfo: DFunction = functions.find(x => x.command === req.params.function.toUpperCase())
     if (!functionInfo) {
-        functionInfo = functions.find(x => x.command === req.query.fuzzy.toUpperCase())
+        const options = {
+            keys: ['command', 'metadata.description']
+        }
+        const fuse = new Fuse(functions, options)
+        functionInfo = fuse.search(req.params.function.toUpperCase())[0].item
     }
     let functionName = functionInfo.command;
     if (functionInfo) {
-        const args = validateFunction(functionInfo, req.query.q ? req.query.q.split(",") : [])
-        if(args) {
-            const test = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
-            const testInstance = new test(functionInfo.metadata.variables || {}) as Action;
-            const props = await testInstance.preProcessing(args);
-            const template = await fs.readFile(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}.handlebars`)
-            const compiledTemplate = Handlebars.compile(template.toString())
-            res.render("panel", {panelBody: compiledTemplate(props)});
+        const args = validateFunction(functionInfo, req.query.q ? (req.query.q as string).split(",") : [])
+        if (args) {
+            const FAction = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
+            const action = new FAction(functionInfo.metadata.variables || {}) as Action;
+            try {
+                functionRouter = action.addRoutes()
+                const props = await action.preProcessing(args);
+                let templateName = functionName.toLowerCase()
+                if (props && props["HANDLEBARS_VIEW"]) {
+                    templateName = props["HANDLEBARS_VIEW"];
+                }
+                const template = await fs.readFile(`${__dirname}/functions/${functionName}/${templateName}.handlebars`)
+                const compiledTemplate = Handlebars.compile(template.toString())
+                res.render("panel", {panelBody: compiledTemplate(props), props: props});
+            } catch (e) {
+                const template = await fs.readFile(`${__dirname}/views/internalError.handlebars`)
+                const compiledTemplate = Handlebars.compile(template.toString())
+                res.render("panel", {panelBody: compiledTemplate({stackTrace: e})});
+            }
         } else {
             const template = await fs.readFile(`${__dirname}/views/error.handlebars`)
             const compiledTemplate = Handlebars.compile(template.toString())
@@ -81,5 +102,3 @@ collectFunctions().then((res) => {
         console.log("Started Server")
     })
 })
-
-

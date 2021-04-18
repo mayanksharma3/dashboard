@@ -3,33 +3,75 @@
         <div style=" margin-top: 35px;">
             <i onclick="window.history.back()" style="color:white; cursor: pointer; padding-bottom: 10px"
                class="fa fa-arrow-left"></i>
-            <input oninput="updateSearch(this.value)" id="panelTextInput" class="panelInput" type="text" autofocus/>
-            <div id="panelResults" style="color: white; background: rgb(242, 165, 71); width: calc(100% - 100px); position: fixed; z-index: 5000">
+            <i style="color:white; cursor: pointer; margin-bottom: 10px; float: right"
+               class="fa fa-cog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               id="settingsDropdown"></i>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDropdown">
+                <div class="dropdown-item">
+                    Zoom:
+                    <div onclick="modifyZoom(-0.1)" class="btn btn-warning">-</div>
+                    <span id="zoomSize" style="padding-left: 5px; padding-right: 5px">100%</span>
+                    <div onclick="modifyZoom(0.1)" class="btn btn-warning" style="float: right">+</div>
+                </div>
+            </div>
+            <br/>
+            <div id="panelInputContainer" class="focusedPanelContainer" onclick="focusInput()">
+                <img src="/assets/caret-right.png" style="height: 26px; padding: 0; opacity: 0.7; margin:0; margin-bottom: 3px"/>
+                <span id="panelTextInput" contenteditable="true"></span>
+                <button id="caret" for="panelTextInput">&nbsp;</button>
+            </div>
+            <div id="panelResults"
+                 style="color: white; background: rgb(242, 165, 71); width: calc(100% - 100px); position: fixed; z-index: 5000">
             </div>
         </div>
     </div>
-    <div id="panelBody" style="z-index: 100; margin-top: 70px;">
+    <div id="panelBody" style="height: calc(100vh - 100px)">
         {{{panelBody}}}
     </div>
-    <style>
-        .fixed-header {
-            width: calc(100% - 100px);
-            position: fixed;
-            top: 0;
-            z-index: 1000 !important;
-        }
-    </style>
     <script>
+
+        let zoomFactor = 1.0
+
+        function modifyZoom(factor) {
+            zoomFactor += factor;
+            document.getElementById("panelBody").style.zoom = (zoomFactor * 100) + "%"
+            $('#zoomSize').html(Math.round(zoomFactor * 100) + "%")
+        }
+
+        const input = document.getElementById('panelTextInput');
+        const caret = document.getElementById('caret');
+
+        input.focus()
+
+        function focusInput() {
+            $('#panelInputContainer').addClass('focusedPanelContainer')
+            document.getElementById('panelTextInput').focus()
+        }
+
+        input.addEventListener('blur', (e) => {
+            $('#panelInputContainer').removeClass ('focusedPanelContainer')
+        });
+
         function isNumeric(str) {
             return !isNaN(str) && !isNaN(parseFloat(str))
         }
 
         let panelInput = document.getElementById("panelTextInput");
-        panelInput.addEventListener("keyup", function (event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                let functionInput = panelInput.value;
-                panelInput.value = ""
+        panelInput.addEventListener('input', function () {
+            updateSearch($('#panelTextInput').html())
+        });
+
+        document.addEventListener('keydown', function (e) {
+            console.log(e.key)
+            if (e.key === 'Enter' && e.target.id === 'panelTextInput') {
+                e.preventDefault()
+            }
+        });
+
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'Enter' && e.target.id === 'panelTextInput') {
+                let functionInput = $('#panelTextInput').html();
+                $('#panelTextInput').html('')
                 if (isNumeric(functionInput)) {
                     keyShortcuts[parseInt(functionInput)]()
                     return;
@@ -38,10 +80,11 @@
                 $('#panelResults').html('')
                 if (args.length > 0) {
                     let chosenFunction = args.shift();
-                    location.href = `/panel/${chosenFunction}?fuzzy=${fuse.search(chosenFunction)[0].command}&q=${encodeURIComponent(args)}`
+                    location.href = `/panel/${chosenFunction}?q=${encodeURIComponent(args)}`
                 }
             }
         });
+
 
         const fuse = new Fuse(functions, {
             keys: ['command', 'metadata.description']
@@ -49,7 +92,7 @@
 
         function updateSearch(searchString) {
             $('#panelResults').html('')
-            fuse.search(searchString.split(" ")[0]).forEach(x => {
+            fuse.search(searchString.split(" ")[0]).slice(0, 5).forEach(x => {
                 $('#panelResults').append(`<span style="margin-left: 10px; padding: 0">
                     <a style="text-decoration: none; color: white" href="/panel/${x.command}">
                         <b>${x.command}</b> (${x.metadata.description})
@@ -63,8 +106,19 @@
             })
         }
 
-        $("body").bind('keydown', function (e) {
-            $('#panelTextInput').focus();
+        // $("body").bind('keydown', function (e) {
+        //     $('#panelTextInput').focus();
+        // });
+
+        $('.dropdown-menu').on('click', function (e) {
+            e.stopPropagation();
         });
     </script>
 </div>
+<style>
+        {{#unless props.scratchpad}}
+        * {
+            font-family: 'Ubuntu', sans-serif;
+        }
+        {{/unless}}
+</style>

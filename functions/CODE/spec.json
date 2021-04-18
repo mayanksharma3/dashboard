@@ -1,0 +1,10 @@
+{
+  "description": "Code Scratch Pad",
+  "commands": [
+    {
+      "id": "pickLanguage",
+      "syntax": "{{LANGUAGE}}",
+      "description": "Create scratch pad for given language"
+    }
+  ]
+}

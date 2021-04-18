@@ -1,0 +1,15 @@
+<h3>Shortened URL</h3>
+<div style="width: 50%; margin: 0 auto">
+    <div class="card">
+        <div class="card-header">
+            Shortened URL for {{url}}
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <span onclick="$.get('/open?q={{short_url}}')">{{short_url}}</span>
+                <i style="float:right;" class="fa fa-copy"></i>
+            </blockquote>
+        </div>
+    </div>
+
+</div>

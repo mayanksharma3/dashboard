@@ -1,9 +1,15 @@
 {
-  "description": "Go to previous page",
+  "description": "Show Stocks",
   "commands": [
     {
-      "syntax": "{{EXCHANGE}} {{STOCK}}",
-      "description": "Get stock info"
+      "id": "default",
+      "syntax": "*",
+      "description": "Get real-time stock info"
+    },
+    {
+      "id": "overview",
+      "syntax": "OVERVIEW",
+      "description": "Get stock overview for favourites"
     }
   ]
 }
