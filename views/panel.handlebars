@@ -44,12 +44,14 @@
         input.focus()
 
         function focusInput() {
+            $('#panelResults').show()
             $('#panelInputContainer').addClass('focusedPanelContainer')
             document.getElementById('panelTextInput').focus()
         }
 
         input.addEventListener('blur', (e) => {
-            $('#panelInputContainer').removeClass ('focusedPanelContainer')
+            $('#panelResults').hide()
+            $('#panelInputContainer').removeClass('focusedPanelContainer')
         });
 
         function isNumeric(str) {

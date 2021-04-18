@@ -3,7 +3,12 @@ import axios from "axios";
 
 export default class extends Action {
 
-    async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
+    async preProcessing(args: { id: string, variables: { [key: string]: string } }) {
+        switch (args.id) {
+            case "default": {
+                return {HANDLEBARS_VIEW: "default"}
+            }
+        }
         const fsResult = await axios.get(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${args.variables["FROM"]}&to_currency=${args.variables["TO"]}&apikey=UUJH7C28CFKAR8ZC`)
         return {
             from: args.variables["FROM"],

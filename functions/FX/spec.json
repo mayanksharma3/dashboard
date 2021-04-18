@@ -2,9 +2,14 @@
   "description": "Foreign Exchange Rates",
   "commands": [
     {
+      "id": "default",
+      "syntax": "*",
+      "description": "Find fx conversion overview"
+    },
+    {
       "id": "convertAmount",
       "syntax": "{{FROM}} {{TO}} {{AMOUNT}}",
-      "description": "Find news based on query"
+      "description": "Find fx conversions to and from for an amount"
     }
   ]
 }

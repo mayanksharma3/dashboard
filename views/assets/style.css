@@ -57,6 +57,10 @@ input {
     opacity: 1 !important;
 }
 
+.focusedPanelContainer > #caret {
+    background-color: rgba(78, 142, 245, 1) !important;
+}
+
 #panelTextInput {
     margin-left: 0px;
     background: black !important;
@@ -75,7 +79,7 @@ input {
     padding: 0;
     margin: 2px 0 2px -3px;
     outline: none;
-    background-color: rgb(78, 142, 245);
+    background-color: rgba(78, 142, 245, 0.7);
     display: inline-block;
     width: 10px;
     height: 24px;

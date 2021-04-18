@@ -13,6 +13,8 @@ export default class extends Action {
         }
         result.news = await Feed.load('https://news.google.com/rss' + query);
         return result
+        // {news:
+        //  {items: [...., ....]}}
     }
 
 }
