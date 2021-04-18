@@ -63,7 +63,7 @@ input {
 
 #panelTextInput {
     margin-left: 0px;
-    background: black !important;
+    background: transparent !important;
     color: white !important;
     z-index: 1000 !important;
     font-weight: bold;

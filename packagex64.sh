@@ -1,5 +1,5 @@
 rm -rf *arm64
 tsc
-electron-packager . Terminal --overwrite
-electron-installer-dmg ./Terminal-darwin-arm64/Terminal.app Terminal --overwrite
+electron-packager . Dashboard --overwrite
+electron-installer-dmg ./Dashboard-darwin-arm64/Dashboard.app Dashboard --overwrite
 rm -rf *arm64
