@@ -7,9 +7,10 @@ import Handlebars from 'handlebars';
 import open from "open";
 import {DFunction, validateFunction} from "./utils/functions";
 import Fuse from 'fuse.js';
+import * as http from "http";
 
 const app = express()
-
+const server = http.createServer(app);
 app.use(cors())
 
 app.use("/", express.static(__dirname + "/views"))
@@ -68,6 +69,7 @@ app.get('/panel/:function', async (req, res) => {
             const FAction = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
             const action = new FAction(functionInfo.metadata.variables || {}) as Action;
             try {
+                action.addToApp(server);
                 functionRouter = action.addRoutes()
                 const props = await action.preProcessing(args);
                 let templateName = functionName.toLowerCase()
@@ -98,7 +100,7 @@ collectFunctions().then((res) => {
         return JSON.stringify(res);
     });
     functions = res;
-    app.listen(process.env.PORT || 4221, () => {
+    server.listen(process.env.PORT || 4221, () => {
         console.log("Started Server")
     })
 })

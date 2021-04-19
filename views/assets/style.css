@@ -59,6 +59,8 @@ input {
 
 .focusedPanelContainer > #caret {
     background-color: rgba(78, 142, 245, 1) !important;
+    /*animation: blink 2s step-start 0s infinite;*/
+    /*-webkit-animation: blink 2s step-start 0s infinite;*/
 }
 
 #panelTextInput {
@@ -75,12 +77,23 @@ input {
     vertical-align: top;
 }
 
+@keyframes blink {
+    50% {
+        opacity: 0.0;
+    }
+}
+@-webkit-keyframes blink {
+    50% {
+        opacity: 0.0;
+    }
+}
+
 #caret {
     border: 0;
     padding: 0;
     margin: 2px 0 2px -3px;
     outline: none;
-    background-color: rgba(78, 142, 245, 0.7);
+    background-color: rgba(78, 142, 245, 0.0);
     display: inline-block;
     width: 10px;
     height: 20px;

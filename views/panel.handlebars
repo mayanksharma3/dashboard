@@ -9,14 +9,16 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="settingsDropdown">
                 <div class="dropdown-item">
                     Zoom:
-                    <div onclick="modifyZoom(-0.1)" style="font-family: monospace" class="btn btn-warning btn-sm">-</div>
+                    <div onclick="modifyZoom(-0.1)" style="font-family: monospace" class="btn btn-warning btn-sm">-
+                    </div>
                     <span id="zoomSize" style="padding-left: 5px; padding-right: 5px">100%</span>
                     <div onclick="modifyZoom(0.1)" style="font-family: monospace" class="btn btn-warning btn-sm">+</div>
                 </div>
             </div>
             <br/>
             <div id="panelInputContainer" class="focusedPanelContainer" onclick="focusInput()">
-                <img src="/assets/caret-right.png" style="height: 20px; width: 5px; padding: 0; opacity: 0.7; margin:0; margin-bottom: 8px"/>
+                <img src="/assets/caret-right.png"
+                     style="height: 20px; width: 5px; padding: 0; opacity: 0.7; margin:0; margin-bottom: 8px"/>
                 <span id="panelTextInput" contenteditable="true"></span>
                 <button id="caret" for="panelTextInput">&nbsp;</button>
             </div>
@@ -33,9 +35,15 @@
         let zoomFactor = 1.0
 
         function modifyZoom(factor) {
-            zoomFactor += factor;
-            document.getElementById("panelBody").style.zoom = (zoomFactor * 100) + "%"
-            $('#zoomSize').html(Math.round(zoomFactor * 100) + "%")
+            if (zoomFactor + factor > 0) {
+                zoomFactor += factor;
+                document.getElementById("panelBody").style.zoom = (zoomFactor * 100) + "%"
+                if (Math.round(zoomFactor * 100) < 100) {
+                    $('#zoomSize').html("<span>&nbsp;</span>" + Math.round(zoomFactor * 100) + "%")
+                } else {
+                    $('#zoomSize').html(Math.round(zoomFactor * 100) + "%")
+                }
+            }
         }
 
         const input = document.getElementById('panelTextInput');
@@ -60,7 +68,10 @@
 
         let panelInput = document.getElementById("panelTextInput");
         panelInput.addEventListener('input', function () {
-            updateSearch($('#panelTextInput').html())
+            const searchInput = $('#panelTextInput').html()
+            if (!isNumeric(searchInput)) {
+                updateSearch(searchInput)
+            }
         });
 
         document.addEventListener('keydown', function (e) {

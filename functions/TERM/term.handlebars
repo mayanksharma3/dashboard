@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="/assets/xterm/css/xterm.css"/>
+<script src="/assets/xterm/lib/xterm.js"></script>
+<div id="terminal"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+<script>
+    function connectToSocket() {
+        return new Promise(res => {
+            const socket = io();
+            res(socket);
+        });
+    }
+
+    function startTerminal(container, socket) {
+        const terminal = new TerminalUI(socket);
+        terminal.attachTo(container);
+        terminal.startListening();
+    }
+
+    function start() {
+        const container = document.getElementById("terminal");
+
+        connectToSocket().then(socket => {
+            startTerminal(container, socket);
+        });
+    }
+
+    start();
+
+    class TerminalUI {
+        constructor(socket) {
+            this.terminal = new Terminal();
+
+            this.terminal.setOption("theme", {
+                background: "#141c21",
+                foreground: "#F5F8FA"
+            });
+
+            this.socket = socket;
+        }
+
+        startListening() {
+            this.terminal.onData(data => this.sendInput(data));
+            this.socket.on("output", data => {
+            this.terminal.focus()
+                this.write(data);
+            });
+        }
+
+        write(text) {
+            this.terminal.write(text);
+        }
+
+        prompt() {
+            this.terminal.write(`\r\n$ `);
+        }
+
+        sendInput(input) {
+            this.socket.emit("input", input);
+        }
+
+        attachTo(container) {
+            this.terminal.open(container);
+            this.terminal.write("");
+            this.prompt();
+        }
+
+        clear() {
+            this.terminal.clear();
+        }
+    }
+
+</script>

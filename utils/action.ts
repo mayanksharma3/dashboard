@@ -1,6 +1,7 @@
 import path from "path";
 import Datastore from "nedb-promises";
-import {Router} from "express";
+import {Express, Router} from "express";
+import {Server} from "http";
 
 abstract class Action {
 
@@ -17,6 +18,10 @@ abstract class Action {
     addRoutes(): Router | undefined {
         return undefined;
     };
+
+    addToApp(app: Server) {
+
+    }
 
     async dbInstance(dbName: string = "default"): Promise<Datastore> {
         const baseDBPath = path.join(require("os").homedir(), ".config", "dashboard", this.name, `${dbName}.db`)
