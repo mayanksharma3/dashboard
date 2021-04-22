@@ -29,6 +29,7 @@ export function collectFunctions(): Promise<{ command: string, metadata: any }[]
 }
 
 export function validateFunction(dFunction: DFunction, args: string[]): FunctionVariables | undefined {
+    args = args.map(x => x.toUpperCase())
     let commands = dFunction.metadata.commands;
     if (args.length > 0 && !commands) {
         return undefined;

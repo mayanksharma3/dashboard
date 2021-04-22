@@ -1,0 +1,30 @@
+{
+  "description": "Show spotify controls (MacOS only)",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Show default spotify controls"
+    },
+    {
+      "id": "nextTrack",
+      "syntax": "NEXT",
+      "description": "Play next song in spotify"
+    },
+    {
+      "id": "previousTrack",
+      "syntax": "PREV",
+      "description": "Play previous song in spotify"
+    },
+    {
+      "id": "pauseTrack",
+      "syntax": "PAUSE",
+      "description": "Pause current song in spotify"
+    },
+    {
+      "id": "playTrack",
+      "syntax": "PLAY",
+      "description": "Play current song in spotify"
+    }
+  ]
+}
