@@ -1,0 +1,15 @@
+{
+  "description": "Show random quote",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Get random inspirational quote"
+    },
+    {
+      "id": "programmingQuote",
+      "syntax": "PROG",
+      "description": "Get random programming quote"
+    }
+  ]
+}

@@ -27,8 +27,10 @@
             </div>
         </div>
     </div>
-    <div id="panelBody" style="height: calc(100vh - 100px)">
-        {{{panelBody}}}
+    <div id="panelBody" style="height: calc(100vh - 100px); width: 100%;">
+        <div id="zoomedBody">
+            {{{panelBody}}}
+        </div>
     </div>
     <script>
 
@@ -37,7 +39,7 @@
         function modifyZoom(factor) {
             if (zoomFactor + factor > 0) {
                 zoomFactor += factor;
-                document.getElementById("panelBody").style.zoom = (zoomFactor * 100) + "%"
+                document.getElementById("zoomedBody").style.zoom = (zoomFactor * 100) + "%"
                 if (Math.round(zoomFactor * 100) < 100) {
                     $('#zoomSize').html("<span>&nbsp;</span>" + Math.round(zoomFactor * 100) + "%")
                 } else {
