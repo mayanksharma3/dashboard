@@ -1,4 +1,4 @@
-<h3>News Feed {{#if query}} - {{query}}{{/if}}</h3>
+<h3 style="text-align: center">News Feed {{#if query}} - {{query}}{{/if}}</h3>
 <div>
     {{#each news.items}}
         <a href="#" onclick="$.get('/open?q=' +'{{this.url}}')">

@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 require('ts-node/register')
 require('./main')
+
 function createWindow () {
     const win = new BrowserWindow({
         width: 800,
@@ -10,7 +11,6 @@ function createWindow () {
             nodeIntegration: true
         }
     })
-
     win.loadURL('http://localhost:4221/panel/HOME')
 }
 

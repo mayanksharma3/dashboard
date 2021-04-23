@@ -1,0 +1,160 @@
+<div id="quizForm" class="row" style="width: 60%; margin: 0 auto">
+    <h2 style="text-align: center">Quiz Questions</h2>
+    <form action="/api" id="generateQuizForm">
+        <div class="form-group">
+            <label for="trivia_amount">Number of Questions:</label>
+            <input type="number" name="trivia_amount" id="trivia_amount" class="form-control" min="1" max="50"
+                   value="10">
+        </div>
+        <div class="form-group">
+            <label for="trivia_category">Select Category: </label>
+            <select name="trivia_category" class="form-control">
+                <option value="any">Any Category</option>
+                <option value="9">General Knowledge</option>
+                <option value="10">Entertainment: Books</option>
+                <option value="11">Entertainment: Film</option>
+                <option value="12">Entertainment: Music</option>
+                <option value="13">Entertainment: Musicals &amp; Theatres</option>
+                <option value="14">Entertainment: Television</option>
+                <option value="15">Entertainment: Video Games</option>
+                <option value="16">Entertainment: Board Games</option>
+                <option value="17">Science &amp; Nature</option>
+                <option value="18">Science: Computers</option>
+                <option value="19">Science: Mathematics</option>
+                <option value="20">Mythology</option>
+                <option value="21">Sports</option>
+                <option value="22">Geography</option>
+                <option value="23">History</option>
+                <option value="24">Politics</option>
+                <option value="25">Art</option>
+                <option value="26">Celebrities</option>
+                <option value="27">Animals</option>
+                <option value="28">Vehicles</option>
+                <option value="29">Entertainment: Comics</option>
+                <option value="30">Science: Gadgets</option>
+                <option value="31">Entertainment: Japanese Anime &amp; Manga</option>
+                <option value="32">Entertainment: Cartoon &amp; Animations</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="trivia_difficulty">Select Difficulty: </label>
+            <select name="trivia_difficulty" class="form-control">
+                <option value="any">Any Difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="trivia_type">Select Type: </label>
+            <select name="trivia_type" class="form-control">>
+                <option value="any">Any Type</option>
+                <option value="multiple">Multiple Choice</option>
+                <option value="boolean">True / False</option>
+            </select>
+        </div>
+        <br/>
+        <button class="btn btn-warning" type="submit" style="float: right">Generate Quiz</button>
+    </form>
+</div>
+<div id="quizCarousel" class="carousel slide" style="display: none">
+    <div id="innerCarousel" class="carousel-inner">
+    </div>
+    <!--    <a class="carousel-control-prev" href="#quizCarousel" role="button" data-slide="prev">-->
+    <!--        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+    <!--        <span class="sr-only">Previous</span>-->
+    <!--    </a>-->
+    <!--    <a class="carousel-control-next" href="#quizCarousel" role="button" data-slide="next">-->
+    <!--        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+    <!--        <span class="sr-only">Next</span>-->
+    <!--    </a>-->
+    <button id="nextQuestion" class="btn btn-success" type="button" style="position:fixed; right: 30px; bottom: 30px"
+            disabled onclick="nextQuestion()">Next Question
+    </button>
+</div>
+
+<script>
+    $("#generateQuizForm").submit(function (e) {
+        e.preventDefault();
+        const form = $(this);
+        const url = form.attr('action');
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: form.serialize(),
+            success: function (data) {
+                $('#quizForm').hide()
+                $('#quizCarousel').show()
+
+                data.results.forEach((question, index) => {
+                    let possibleAnswers = question.incorrect_answers;
+                    possibleAnswers.push(question.correct_answer)
+                    possibleAnswers = possibleAnswers.sort(() => Math.random() - 0.5)
+                    const answersDiv = possibleAnswers.map((answer) => {
+                        let isCorrect = answer === question.correct_answer;
+                        return `<div onclick="showAnswer(${index}, this, ${isCorrect})" class='answerOption ${isCorrect ? "correct" + index : ""}'>${answer}</div>`
+                    }).join("")
+                    $('#innerCarousel').append(`
+                        <div style="width: 100%" class="carousel-item ${index === 0 ? 'active' : ''}">
+                            <div style="width: 100%;">
+                                <h3 style="text-align: center; text-transform: capitalize !important">${question.question}</h3>
+                                ${answersDiv}
+                            </div>
+                        </div>
+                    `)
+                })
+
+                $('#innerCarousel').append(`
+                        <div style="width: 100%" class="carousel-item">
+                            <div style="width: 100%;">
+                                <h3 style="text-align: center; text-transform: capitalize !important">Result</h3>
+                                <h1 style="text-align: center"><span id="correct"></span> / <span id="total"></span></h1>
+                            </div>
+                        </div>
+                `)
+
+                $('#total').html(data.results.length)
+
+                $('.carousel').carousel({
+                    interval: false,
+                    wrap: false
+                })
+            }
+        });
+    });
+
+    let total = 0
+
+    function showAnswer(index, el, isCorrect) {
+        total += isCorrect ? 1 : 0
+        $(el).addClass('incorrectAnswer')
+        $('.correct' + index).addClass('correctAnswer')
+        $('#nextQuestion').removeAttr("disabled")
+        $('#correct').html(total)
+    }
+
+    function nextQuestion() {
+        $('.carousel').carousel('next');
+        $('#nextQuestion').attr("disabled", true);
+    }
+</script>
+<style>
+    .answerOption {
+        width: 100%;
+        background: #2f2f2f;
+        margin-bottom: 20px;
+        text-align: left;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .correctAnswer {
+        border: 2px solid green !important;
+    }
+
+    .incorrectAnswer {
+        border: 2px solid red;
+    }
+</style>
