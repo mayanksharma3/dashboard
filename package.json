@@ -10,6 +10,7 @@
     "dev": "npm run build && npm run electron"
   },
   "build": {
+    "asar": false,
     "files": [
       "**/*"
     ],
