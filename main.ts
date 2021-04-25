@@ -8,13 +8,15 @@ import open from "open";
 import {DFunction, validateFunction} from "./utils/functions";
 import Fuse from 'fuse.js';
 import * as http from "http";
-import * as path from "path";
 
 import bodyParser from "body-parser";
+import path from "path";
+import Datastore from "nedb-promises";
+import {Alias} from "./functions/ALIAS/alias";
 
 const app = express()
 const server = http.createServer(app);
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 app.use(cors())
@@ -38,11 +40,23 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
 function collectFunctions(): Promise<{ command: string, metadata: any }[]> {
-    return fs.readdir(__dirname + "/functions").then((commands) => {
-        return commands.map((command) => {
+    return fs.readdir(__dirname + "/functions").then(async (commands) => {
+        const preBuiltCommands = commands.map((command) => {
             const result = require(__dirname + "/functions/" + command + "/spec.json")
             return {command: command, metadata: result}
         })
+
+        const baseDBPath = path.join(require("os").homedir(), ".config", "dashboard", "ALIAS", "default.db")
+        const db = Datastore.create(baseDBPath)
+        await db.load()
+        const aliases = await db.find<Alias>({})
+        aliases.forEach(alias => {
+            preBuiltCommands.push({
+                command: alias.alias,
+                metadata: {actualCommand: alias.command, description: alias.command}
+            })
+        })
+        return preBuiltCommands
     })
 }
 
@@ -60,18 +74,29 @@ app.use("/api", (req, res, next) => {
     functionRouter(req, res, next)
 });
 
+function findFunction(functions: DFunction[], functionName: string) {
+    const options = {
+        keys: ['command', 'metadata.description']
+    }
+    const fuse = new Fuse(functions, options)
+    return fuse.search(functionName.toUpperCase())[0].item
+}
+
 app.get('/panel/:function', async (req, res) => {
     let functionInfo: DFunction = functions.find(x => x.command === req.params.function.toUpperCase())
     if (!functionInfo) {
-        const options = {
-            keys: ['command', 'metadata.description']
-        }
-        const fuse = new Fuse(functions, options)
-        functionInfo = fuse.search(req.params.function.toUpperCase())[0].item
+        functionInfo = findFunction(functions, req.params.function.toLowerCase());
     }
     let functionName = functionInfo.command;
     if (functionInfo) {
-        const args = validateFunction(functionInfo, req.query.q ? (req.query.q as string).split(",") : [])
+        let functionParams = req.query.q;
+        if (functionInfo.metadata.actualCommand) {
+            let aliasArgs = functionInfo.metadata.actualCommand.split(" ");
+            functionName = aliasArgs.shift()
+            functionInfo = findFunction(functions, functionName)
+            functionParams = aliasArgs.join(",")
+        }
+        const args = validateFunction(functionInfo, functionParams ? (functionParams as string).split(",") : [])
         if (args) {
             const FAction = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
             const action = new FAction(functionInfo.metadata.variables || {}, functionName) as Action;
@@ -96,14 +121,19 @@ app.get('/panel/:function', async (req, res) => {
 
 export let functions: DFunction[];
 
-collectFunctions().then((res) => {
+export function init(callback: () => void) {
+    updateFunctions().then(() => {
+        server.listen(process.env.PORT || 4221, () => {
+            console.log("Started Server")
+            callback()
+        })
+    })
+}
+
+export async function updateFunctions() {
+    const res = await collectFunctions()
     Handlebars.registerHelper('functionsMeta', function () {
         return JSON.stringify(res);
     });
     functions = res;
-    server.listen(process.env.PORT || 4221, () => {
-        console.log("Started Server")
-    })
-})
-
-export default app;
+}

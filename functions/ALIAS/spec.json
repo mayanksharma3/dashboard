@@ -1,0 +1,20 @@
+{
+  "description": "Generate alias for commands or partial commands",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Show aliases"
+    },
+    {
+      "id": "deleteAlias",
+      "syntax": "DELETE {{ALIAS}}",
+      "description": "Remove Alias"
+    },
+    {
+      "id": "addAlias",
+      "syntax": "{{ALIAS}} {{CMD}}*",
+      "description": "Create Alias from ALIAS to CMD"
+    }
+  ]
+}

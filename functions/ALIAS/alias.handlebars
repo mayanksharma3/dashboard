@@ -1,0 +1,22 @@
+<div class="row">
+    <h3>Aliases</h3>
+    {{#each aliases}}
+        <div class='aliasRow'>
+            {{this.alias}} -> {{this.command}}
+            <button onclick="location.href = '/panel/ALIAS?q=DELETE,{{this.alias}}'" class="border-0 btn btn-outline-danger" style="float: right"><i class="fa fa-times"></i></button>
+            </button>
+        </div>
+    {{/each}}
+</div>
+<style>
+    .aliasRow {
+        width: 100%;
+        background: #2f2f2f;
+        margin-bottom: 20px;
+        text-align: left;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>

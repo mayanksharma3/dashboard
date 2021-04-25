@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 require('ts-node/register')
-require('./main')
+const {init} = require('./main')
 
 function createWindow () {
     const win = new BrowserWindow({
@@ -15,17 +15,19 @@ function createWindow () {
     win.loadURL('http://localhost:4221/panel/HOME')
 }
 
+init(() => {
+    app.whenReady().then(() => {
+        createWindow()
 
-
-app.whenReady().then(() => {
-    createWindow()
-
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow()
-        }
+        app.on('activate', () => {
+            if (BrowserWindow.getAllWindows().length === 0) {
+                createWindow()
+            }
+        })
     })
 })
+
+
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

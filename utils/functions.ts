@@ -8,6 +8,7 @@ export const exec = promisify(exec2)
 export interface DFunction {
     command: string,
     metadata: {
+        actualCommand?: string;
         variables?: {[key: string]: string}
         description: string;
         commands?: { id: string, syntax: string, description: string }[]

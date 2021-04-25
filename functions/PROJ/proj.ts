@@ -144,7 +144,6 @@ export default class extends Action {
         const chosenIde = ide as string;
         const db = await this.dbInstance()
         const project = await db.findOne<Project>({id: id as string})
-        console.log(project)
         await exec(`open -b '${ideToApp[chosenIde]}'  ${project.localPath}`)
     }
 
