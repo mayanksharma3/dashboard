@@ -1,0 +1,30 @@
+{
+  "description": "Show projects setup",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "View all projects"
+    },
+    {
+      "id": "addProject",
+      "syntax": "ADD",
+      "description": "Add new project"
+    },
+    {
+      "id": "projectTerminal",
+      "syntax": "{{ID}} TERM",
+      "description": "Open given project in terminal"
+    },
+    {
+      "id": "projectFolder",
+      "syntax": "{{ID}} FOLDER",
+      "description": "Open given project in folder"
+    },
+    {
+      "id": "projectIDE",
+      "syntax": "{{ID}} IDE",
+      "description": "Open given project in chosen IDE"
+    }
+  ]
+}

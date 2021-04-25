@@ -8,11 +8,14 @@ function createWindow () {
         height: 600,
         titleBarStyle: 'hiddenInset',
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            enableRemoteModule: true
         }
     })
     win.loadURL('http://localhost:4221/panel/HOME')
 }
+
+
 
 app.whenReady().then(() => {
     createWindow()

@@ -8,9 +8,15 @@ import open from "open";
 import {DFunction, validateFunction} from "./utils/functions";
 import Fuse from 'fuse.js';
 import * as http from "http";
+import * as path from "path";
+
+import bodyParser from "body-parser";
 
 const app = express()
 const server = http.createServer(app);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use(cors())
 
 app.use("/", express.static(__dirname + "/views"))
@@ -42,6 +48,7 @@ function collectFunctions(): Promise<{ command: string, metadata: any }[]> {
 
 app.get('/open', async (req, res) => {
     await open(req.query.q as string)
+    res.send("Completed")
 });
 
 app.get('/panel', (req, res) => {
@@ -67,7 +74,7 @@ app.get('/panel/:function', async (req, res) => {
         const args = validateFunction(functionInfo, req.query.q ? (req.query.q as string).split(",") : [])
         if (args) {
             const FAction = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;
-            const action = new FAction(functionInfo.metadata.variables || {}) as Action;
+            const action = new FAction(functionInfo.metadata.variables || {}, functionName) as Action;
             try {
                 action.addToApp(server);
                 functionRouter = action.addRoutes()
@@ -76,18 +83,12 @@ app.get('/panel/:function', async (req, res) => {
                 if (props && props["HANDLEBARS_VIEW"]) {
                     templateName = props["HANDLEBARS_VIEW"];
                 }
-                const template = await fs.readFile(`${__dirname}/functions/${functionName}/${templateName}.handlebars`)
-                const compiledTemplate = Handlebars.compile(template.toString())
-                res.render("panel", {panelBody: compiledTemplate(props), props: props});
+                res.render(`${__dirname}/functions/${functionName}/${templateName}.handlebars`, props);
             } catch (e) {
-                const template = await fs.readFile(`${__dirname}/views/internalError.handlebars`)
-                const compiledTemplate = Handlebars.compile(template.toString())
-                res.render("panel", {panelBody: compiledTemplate({stackTrace: e})});
+                res.render(`${__dirname}/views/internalError.handlebars`, {stackTrace: e});
             }
         } else {
-            const template = await fs.readFile(`${__dirname}/views/error.handlebars`)
-            const compiledTemplate = Handlebars.compile(template.toString())
-            res.render("panel", {panelBody: compiledTemplate({functionInfo: functionInfo})});
+            res.render(`${__dirname}/views/error.handlebars`, {functionInfo: functionInfo});
         }
     }
 
@@ -104,3 +105,5 @@ collectFunctions().then((res) => {
         console.log("Started Server")
     })
 })
+
+export default app;

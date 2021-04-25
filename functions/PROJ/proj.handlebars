@@ -1,0 +1,29 @@
+<div>
+    <h3>Projects</h3>
+    <div class="row">
+        {{#each projects}}
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <img src="https://{{this.domain}}/favicon.ico" style=" width: 100%; {{#if this.invertImage}}filter: invert(1){{/if}}"/>
+                            </div>
+                            <div class="col-7">
+                                <h5>{{this.projectName}}</h5>
+                            </div>
+                            <div class="col-3">
+                                <i style="cursor: pointer" onclick="$.get('/api/terminal?q={{this.localPath}}')" class="fa fa-terminal"></i>
+                                <i style="cursor: pointer; float: right" onclick="$.get('/open?q={{this.localPath}}')" class="fa fa-folder-open"></i>
+                            </div>
+                        </div>
+                        <p class="card-text" style="color: white">{{description}}</p>
+                        <button onclick="$.get('/open?q=http://{{this.repoURL}}')" class="btn btn-primary">Open Repo Website</button>
+                        <img onclick="$.get('/api/ide?id={{this.id}}&ide={{this.ide}}')" height="30px" style="float: right; cursor:pointer;" src="{{this.ideImage}}"/>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+</div>

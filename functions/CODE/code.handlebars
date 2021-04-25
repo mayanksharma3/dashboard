@@ -14,11 +14,17 @@
         let editor = monaco.editor.create(document.getElementById('container'), {
             value: [].join('\n'),
             language: '{{language}}',
-            theme: 'vs-dark'
+            theme: 'vs-dark',
+            fontSize: "18px"
         });
     });
 </script>
 
-<span style="text-transform: capitalize; font-family: 'Ubuntu', sans-serif;">Scratchpad ({{language}})</span>
+<span style="text-transform: capitalize; ">Scratchpad ({{language}})</span>
 <div id="container" style="height: calc(100vh - 150px);"></div>
+<style>
+    #container * {
+        font-family: 'Monaco', sans-serif !important;
+    }
+</style>
 
