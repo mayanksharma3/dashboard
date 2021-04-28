@@ -130,7 +130,7 @@
 
                 document.addEventListener('keyup', function (e) {
                     if (e.key === 'Enter' && e.target.id === 'panelTextInput') {
-                        let functionInput = $('#panelTextInput').html();
+                        let functionInput = $('#panelTextInput').html().split("&nbsp;").join(" ");
                         $('#panelTextInput').html('')
                         if (isNumeric(functionInput)) {
                             keyShortcuts[parseInt(functionInput)]()

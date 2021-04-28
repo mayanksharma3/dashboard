@@ -95,8 +95,11 @@ app.get('/panel/:function', async (req, res) => {
             functionName = aliasArgs.shift()
             functionInfo = findFunction(functions, functionName)
             functionParams = aliasArgs.join(",")
-            functionParams += "," + req.query.q;
+            if (req.query.q) {
+                functionParams += "," + req.query.q;
+            }
         }
+
         const args = validateFunction(functionInfo, functionParams ? (functionParams as string).split(",") : [])
         if (args) {
             const FAction = require(`${__dirname}/functions/${functionName}/${functionName.toLowerCase()}`).default;

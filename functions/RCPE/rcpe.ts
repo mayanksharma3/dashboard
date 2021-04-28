@@ -4,7 +4,7 @@ import {extractRecipe} from "./utils";
 export default class extends Action {
 
     async preProcessing(args: { id: string, variables: {[key: string]: string }}) {
-        const res = await extractRecipe(args.variables["URL"])
+        const res = await extractRecipe(args.variables["URL"].toLowerCase())
         return {recipe: res}
     }
 
