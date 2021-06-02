@@ -1,0 +1,15 @@
+{
+  "description": "Color Picker and Converter",
+  "commands": [
+    {
+      "id": "default",
+      "syntax": "*",
+      "description": "Show color picker"
+    },
+    {
+      "id": "chooseColor",
+      "syntax": "{{COLOR}}*",
+      "description": "Show color conversions for chosen color"
+    }
+  ]
+}

@@ -1,29 +1,148 @@
+<div class="modal fade" id="projectAddModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Add Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3">
+                    <div class="col-md-12">
+                        <label for="inputEmail4" class="form-label">Project Folder</label>
+                        <br/>
+                        <div onclick="getFolder()" class="btn btn-primary">Select Project Folder</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="projectName" class="form-label">Project Name</label>
+                        <input type="text" class="form-control" style="text-transform: initial !important;"
+                               placeholder="Project Name..." id="projectName">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="projectID" class="form-label">Project ID</label>
+                        <input type="text" class="form-control" onkeypress="return event.charCode != 32"
+                               style="text-transform: initial !important;" placeholder="Project ID..." id="projectID">
+                    </div>
+                    <div class="col-12">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" placeholder="Enter project description here..."
+                                  rows="3"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label for="ideChoice" class="form-label">IDE of choice</label>
+                        <select class="form-select" id="ideChoice">
+                            <option value="vscode">Visual Studio Code</option>
+                            <option value="webstorm">WebStorm</option>
+                            <option value="idea">IntelliJ</option>
+                            <option value="pycharm">PyCharm</option>
+                            <option value="clion">CLion</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="button" onclick="addProject()" class="btn btn-primary">Add Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div>
-    <h3>Projects</h3>
-    <div class="row">
+    <h3>
+        Projects
+        <i style="float: right; cursor: pointer" class="fa fa-plus" data-bs-toggle="modal"
+           data-bs-target="#projectAddModal"></i>
+    </h3>
+    <div class="row display-flex">
         {{#each projects}}
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-2">
-                                <img src="https://{{this.domain}}/favicon.ico" style=" width: 100%; {{#if this.invertImage}}filter: invert(1){{/if}}"/>
+            <div class="col-6 col-xl-3" style="margin-bottom: 20px">
+                <div class="card h-100">
+                    <div class="card-body" style="padding-bottom: 5px">
+                        <div class="row align-items-center">
+                            <div class="col-2" style="padding: 5px; margin: 0">
+                                <img src="https://{{this.domain}}/favicon.ico"
+                                     style="width: 80%; {{#if this.invertImage}}filter: invert(1){{/if}}"/>
                             </div>
-                            <div class="col-7">
+                            <div class="col-6">
                                 <h5>{{this.projectName}}</h5>
                             </div>
-                            <div class="col-3">
-                                <i style="cursor: pointer" onclick="$.get('/api/terminal?q={{this.localPath}}')" class="fa fa-terminal"></i>
-                                <i style="cursor: pointer; float: right" onclick="$.get('/open?q={{this.localPath}}')" class="fa fa-folder-open"></i>
+                            <div class="col-4 justify-content-end">
+                                <div style="float: right">
+                                    <i style="cursor: pointer; margin-right: 5px"
+                                       onclick="$.get('/api/terminal?q={{this.localPath}}')"
+                                    class="fa fa-terminal"></i>
+                                    <i style="cursor: pointer; margin-right: 5px;"
+                                       onclick="$.get('/open?q={{this.localPath}}')"
+                                    class="fa fa-folder-open"></i>
+                                    <i style="cursor: pointer;" onclick="deleteProject('{{this.id}}')"
+                                       class="fa fa-trash-alt"></i>
+                                </div>
                             </div>
                         </div>
-                        <p class="card-text" style="color: white">{{description}}</p>
-                        <button onclick="$.get('/open?q=http://{{this.repoURL}}')" class="btn btn-primary">Open Repo Website</button>
-                        <img onclick="$.get('/api/ide?id={{this.id}}&ide={{this.ide}}')" height="30px" style="float: right; cursor:pointer;" src="{{this.ideImage}}"/>
+                        <p class="card-text" style="margin-top: 10px; color: white">
+                            Project ID: {{this.id}}<br/>
+                            {{description}}
+                        </p>
+                    </div>
+                    <div class="card-footer" style="margin-bottom: 10px">
+                        <div class="row align-items-center">
+                            <div class="col-10">
+                                <button onclick="$.get('/open?q=http://{{this.repoURL}}')" class="btn btn-primary">Open
+                                    Repo
+                                    Website
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <img onclick="$.get('/api/ide?id={{this.id}}&ide={{this.ide}}')" height="30px"
+                                style="float:
+                                right; cursor:pointer;" src="{{this.ideImage}}"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         {{/each}}
     </div>
-
 </div>
+<script>
+    let folderPath;
+
+    function getFolder() {
+        $.get('/api/dialog', function (res, status) {
+            folderPath = res.folderPath;
+            $('#projectID').val(res.projectName.toLowerCase().split(" ").join("-"))
+            $('#projectName').val(res.projectName)
+            $('#description').val(res.description)
+        })
+    }
+
+    function addProject() {
+        const project = {
+            id: $('#projectID').val(),
+            projectName: $('#projectName').val(),
+            localPath: folderPath,
+            description: $('#description').val(),
+            preferredIDE: $('#ideChoice').val()
+        }
+
+        $.post('/api/add', project, (res, status) => {
+            window.location.reload();
+        })
+    }
+
+    function deleteProject(id) {
+        const project = {
+            id: id
+        }
+
+        $.post('/api/delete', project, (res, status) => {
+            window.location.reload();
+        })
+    }
+</script>
+<style>
+    h5 {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+</style>

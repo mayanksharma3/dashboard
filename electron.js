@@ -1,12 +1,13 @@
-const { app, BrowserWindow } = require('electron')
+const {app, BrowserWindow} = require('electron')
 require('ts-node/register')
 const {init} = require('./main')
 
-function createWindow () {
+function createWindow() {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
-        titleBarStyle: 'hiddenInset',
+        frame: false,
+        roundedCorners: false,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
@@ -26,7 +27,6 @@ init(() => {
         })
     })
 })
-
 
 
 app.on('window-all-closed', () => {

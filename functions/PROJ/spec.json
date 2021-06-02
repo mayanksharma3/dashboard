@@ -7,11 +7,6 @@
       "description": "View all projects"
     },
     {
-      "id": "addProject",
-      "syntax": "ADD",
-      "description": "Add new project"
-    },
-    {
       "id": "projectTerminal",
       "syntax": "{{ID}} TERM",
       "description": "Open given project in terminal"

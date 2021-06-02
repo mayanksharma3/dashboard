@@ -1,0 +1,68 @@
+<h3>Color Picker</h3>
+<!-- One of the following themes -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css"/> <!-- 'monolith' theme -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/> <!-- 'nano' theme -->
+
+<!-- Modern or es5 bundle -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
+
+<div class="row">
+    <div class="col-5">
+        <div class="example"></div>
+    </div>
+    <div class="col">
+        <h2>HEX: <span id="hex"></span></h2>
+        <h2>RGBA: <span id="rgba"></span></h2>
+    </div>
+</div>
+<script>
+    const pickr = new Pickr({
+        el: '.example',
+
+        default: '{{color}}',
+        defaultRepresentation: 'HEX',
+        components: {
+
+            preview: true,
+            opacity: true,
+            hue: true,
+
+            interaction: {
+                hex: true,
+                rgba: true,
+                hsva: true,
+                input: true,
+                save: false
+            },
+        },
+    }).on('change', (color, source, instance) => {
+        console.log(color.toRGBA())
+        $('#hex').html(color.toHEXA().toString())
+        let rgba = color.toRGBA();
+        rgba[0] = Math.round(rgba[0])
+        rgba[1] = Math.round(rgba[1])
+        rgba[2] = Math.round(rgba[2])
+        $('#rgba').html(rgba.toString())
+        pickr.applyColor();
+    }).on('init', (instance) => {
+        const color = pickr.getSelectedColor()
+        $('#hex').html(color.toHEXA().toString())
+        let rgba = color.toRGBA();
+        rgba[0] = Math.round(rgba[0])
+        rgba[1] = Math.round(rgba[1])
+        rgba[2] = Math.round(rgba[2])
+        $('#rgba').html(rgba.toString())
+        pickr.applyColor();
+    });
+</script>
+<style>
+    .pcr-button {
+        width: 100% !important;
+        height: 300px !important;
+    }
+</style>

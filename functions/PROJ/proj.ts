@@ -99,7 +99,21 @@ export default class extends Action {
             const db = await this.dbInstance()
             const project = req.body as Project;
             project.id = project.id.toLowerCase()
-            await db.insert(project)
+            db.insert(project).then(() => {
+                res.send("Added")
+            }).catch(() => {
+                res.status(400).send("Not Added")
+            })
+        });
+
+        router.post('/delete', async (req, res) => {
+            const db = await this.dbInstance()
+            const projectID = (req.body.id as string).toLowerCase();
+            db.remove({id: projectID}, {}).then(() => {
+                res.send("Added")
+            }).catch(() => {
+                res.status(400).send("Not Added")
+            })
         });
 
         router.get('/dialog', async (req, res) => {
